@@ -30,3 +30,11 @@ app.get("/listings",async (req,res)=>{
    let posts=await Listing.find({});
    res.render("home",{posts});
 });
+
+app.get("/listings/:id",async (req,res)=>{
+    console.log("hii");
+    let {id}=req.params;
+     let post=await Listing.findById(id);
+     console.log(post);
+    res.render("show",{post});
+});
