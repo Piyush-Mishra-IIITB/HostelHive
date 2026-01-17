@@ -13,6 +13,8 @@
     <li>&#8377; <%=post.price%></li>
     <li><%=post.location%></li>
     <li><%=post.country%></li>
+    <form action="/listings/<%=post._id%>/edit"><button>edit</button></form>
+    <form method="post" action="/listings/<%=post._id%>?_method=DELETE"><button>delete</button></form>
    </ul>
 </body>
 </html>
