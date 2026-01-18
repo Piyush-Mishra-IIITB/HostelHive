@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+
+      <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+
+        <!-- Image -->
+        <div class="listing-img-wrap position-relative">
+          <img 
+            src="<%= post.image?.url || post.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200' %>" 
+            class="listing-img"
+            alt="listing_image"
+          >
+
+          <span class="price-badge">
+            ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
+          </span>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4 p-md-5">
+
+          <h2 class="fw-bold mb-2"><%= post.title %></h2>
+          <p class="text-muted mb-4">
+            <i class="fa-solid fa-location-dot me-1 text-danger"></i>
+            <%= post.location %>, <%= post.country %>
+          </p>
+
+          <h5 class="fw-semibold mb-2">Description</h5>
+          <p class="text-muted mb-4"><%= post.description %></p>
+
+          <!-- Price & Location boxes -->
+          <div class="row g-3 mb-4">
+            <!-- Price -->
+            <div class="col-md-6">
+              <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column justify-content-center">
+                <p class="mb-1 text-muted">Price</p>
+                <h5 class="mb-0 fw-bold">
+                  ₹ <%= Number(post.price).toLocaleString("en-IN") %>
+                </h5>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="col-md-6">
+              <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column justify-content-center">
+                <p class="mb-1 text-muted">Location</p>
+                <h6 class="mb-0 fw-semibold text-truncate">
+                  <i class="fa-solid fa-location-dot me-1 text-danger"></i>
+                  <%= post.location %>, <%= post.country %>
+                </h6>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <a href="/listings/<%= post._id %>/edit" class="btn btn-danger w-100 fw-semibold">
+              Edit
+            </a>
+
+            <form method="POST" action="/listings/<%= post._id %>?_method=DELETE" class="w-100">
+              <button class="btn btn-outline-dark w-100 fw-semibold" type="submit">
+                Delete
+              </button>
+            </form>
+          </div>
+
+          <!-- Back -->
+          <div class="mt-4 text-center">
+            <a href="/listings" class="text-decoration-none">← Back to Listings</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

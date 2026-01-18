@@ -1,0 +1,110 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+          <h2 class="fw-bold mb-2">Create a New Listing</h2>
+          <p class="text-muted mb-4">Add hostel details to publish your listing.</p>
+
+          <form action="/listings" method="post">
+
+            <!-- Title -->
+            <div class="mb-3">
+              <label for="title" class="form-label fw-semibold">Title</label>
+              <input
+                id="title"
+                class="form-control"
+                name="listing[title]"
+                type="text"
+                placeholder="Enter title"
+                required
+              >
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" class="form-label fw-semibold">Description</label>
+              <textarea
+                id="description"
+                class="form-control"
+                name="listing[description]"
+                rows="4"
+                placeholder="Enter description"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Image URL -->
+            <div class="mb-3">
+              <label for="image" class="form-label fw-semibold">Image URL</label>
+              <input
+                id="image"
+                class="form-control"
+                name="listing[image]"
+                type="url"
+                placeholder="Enter image URL"
+              >
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+              <label for="price" class="form-label fw-semibold">Price (₹)</label>
+              <input
+                id="price"
+                class="form-control"
+                name="listing[price]"
+                type="number"
+                placeholder="Enter price"
+                min="0"
+                required
+              >
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+              <label for="location" class="form-label fw-semibold">Location</label>
+              <input
+                id="location"
+                class="form-control"
+                name="listing[location]"
+                type="text"
+                placeholder="Enter location"
+                required
+              >
+            </div>
+
+            <!-- Country -->
+            <div class="mb-4">
+              <label for="country" class="form-label fw-semibold">Country</label>
+              <input
+                id="country"
+                class="form-control"
+                name="listing[country]"
+                type="text"
+                placeholder="Enter country"
+                required
+              >
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+              <button class="btn btn-danger w-100 fw-semibold" type="submit">
+                Add Listing
+              </button>
+              <a class="btn btn-outline-secondary w-100" href="/listings">
+                Cancel
+              </a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

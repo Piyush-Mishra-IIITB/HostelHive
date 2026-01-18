@@ -1,0 +1,42 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <p class="text-muted mb-0">Find your next stay</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <% for (let post of posts) { %>
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+        <a class="listing-link" href="/listings/<%= post._id %>">
+          <div class="card listing-card h-100 border-0">
+            
+            <div class="listing-img-wrap">
+              <img src="<%= post.image.url %>" class="card-img-top listing-img" alt="listing_image" >
+
+              </div>
+              
+           
+
+            <div class="card-body">
+              <span class="price-badge">
+                ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
+              </span>
+              <h5 class="card-title listing-title">
+                <%= post.title %>
+              </h5>
+
+              <p class="card-text text-muted listing-location mb-0">
+                <i class="fa-solid fa-location-dot me-1"></i>
+                <%= post.location %>, <%= post.country %>
+              </p>
+            </div>
+
+          </div>
+        </a>
+      </div>
+    <% } %>
+  </div>
+</div>
