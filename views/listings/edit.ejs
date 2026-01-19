@@ -10,7 +10,7 @@
           <h2 class="fw-bold mb-2">Edit Listing</h2>
           <p class="text-muted mb-4">Update hostel details and save changes.</p>
 
-          <form action="/listings/<%= listing._id %>?_method=PATCH" method="POST">
+          <form action="/listings/<%= listing._id %>?_method=PATCH" method="POST" novalidate class="needs-validation">
 
             <!-- Title -->
             <div class="mb-3">
@@ -21,8 +21,11 @@
                 name="listing[title]"
                 type="text"
                 value="<%= listing.title %>"
+                minlength="3"
                 required
               >
+              <div class="valid-feedback">Looks good!</div>
+              <div class="invalid-feedback">Please enter a title (at least 3 characters).</div>
             </div>
 
             <!-- Description -->
@@ -33,8 +36,11 @@
                 class="form-control"
                 name="listing[description]"
                 rows="4"
+                minlength="10"
                 required
               ><%= listing.description %></textarea>
+              <div class="valid-feedback">Great! Description updated.</div>
+              <div class="invalid-feedback">Please write a short description (minimum 10 characters).</div>
             </div>
 
             <!-- Image URL -->
@@ -43,10 +49,13 @@
               <input
                 id="image"
                 class="form-control"
-                name="listing[image]"
+                name="listing[image][url]"
                 type="url"
                 value="<%= listing.image?.url || listing.image %>"
+                required
               >
+              <div class="valid-feedback">Valid image URL.</div>
+              <div class="invalid-feedback">Please enter a valid image URL (starting with http/https).</div>
             </div>
 
             <!-- Price -->
@@ -61,6 +70,8 @@
                 min="0"
                 required
               >
+              <div class="valid-feedback">Perfect!</div>
+              <div class="invalid-feedback">Please enter a valid price (₹0 or more).</div>
             </div>
 
             <!-- Location -->
@@ -74,6 +85,8 @@
                 value="<%= listing.location %>"
                 required
               >
+              <div class="valid-feedback">Location looks good.</div>
+              <div class="invalid-feedback">Please enter a location (e.g., Bhopal, Indore).</div>
             </div>
 
             <!-- Country -->
@@ -87,6 +100,8 @@
                 value="<%= listing.country %>"
                 required
               >
+              <div class="valid-feedback">Country looks good.</div>
+              <div class="invalid-feedback">Please enter a country name.</div>
             </div>
 
             <!-- Buttons -->

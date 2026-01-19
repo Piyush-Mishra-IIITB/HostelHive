@@ -10,7 +10,7 @@
           <h2 class="fw-bold mb-2">Create a New Listing</h2>
           <p class="text-muted mb-4">Add hostel details to publish your listing.</p>
 
-          <form action="/listings" method="post">
+          <form action="/listings" method="post" novalidate class="needs-validation">
 
             <!-- Title -->
             <div class="mb-3">
@@ -23,6 +23,8 @@
                 placeholder="Enter title"
                 required
               >
+              <div class="valid-feedback">Looks good</div>
+              <div class="invalid-feedback">Please enter a title</div>
             </div>
 
             <!-- Description -->
@@ -36,6 +38,9 @@
                 placeholder="Enter description"
                 required
               ></textarea>
+
+              <div class="valid-feedback">Great! Description added.</div>
+              <div class="invalid-feedback">Please enter a valid description</div>
             </div>
 
             <!-- Image URL -->
@@ -62,6 +67,9 @@
                 min="0"
                 required
               >
+             <div class="valid-feedback">Perfect!</div>
+             <div class="invalid-feedback">Please enter a valid price (₹0 or more).</div>
+
             </div>
 
             <!-- Location -->
@@ -75,6 +83,9 @@
                 placeholder="Enter location"
                 required
               >
+             <div class="valid-feedback">Location looks good.</div>
+             <div class="invalid-feedback">Please enter a location (e.g., Bhopal, Indore).</div>
+
             </div>
 
             <!-- Country -->
@@ -88,6 +99,8 @@
                 placeholder="Enter country"
                 required
               >
+              <div class="valid-feedback">Country look's good</div>
+              <div class="invalid-feedback">Please enter a valid country</div>
             </div>
 
             <!-- Buttons -->
