@@ -77,5 +77,56 @@
       </div>
 
     </div>
+  <!--review-->
+  <div class="mt-5">
+  <h4 class="fw-bold mb-3">Leave a Review</h4>
+
+  <form class="needs-validation" novalidate action="/listings/<%=post.id%>/reviews" method="post">
+
+    <!-- Rating -->
+    <div class="mb-3">
+      <label for="rating" class="form-label fw-semibold">
+        Rating
+      </label>
+
+      <input
+        type="range"
+        class="form-range"
+        id="rating"
+        min="1"
+        max="5"
+        name="review[rating]"
+        required
+      >
+      <div class="invalid-feedback">Please select a rating.</div>
+    </div>
+
+    <!-- Comment -->
+    <div class="mb-3">
+      <label for="comment" class="form-label fw-semibold">
+        Comment
+      </label>
+
+      <textarea
+        name="review[comment]"
+        id="comment"
+        class="form-control"
+        rows="3"
+        placeholder="Write your review here..."
+        required
+      ></textarea>
+
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please write a comment.</div>
+    </div>
+
+       <!-- Submit Button -->
+      <button class="btn btn-danger fw-semibold" type="submit">
+        Submit Review
+       </button>
+
+     </form>
+    </div>
+
   </div>
 </div>

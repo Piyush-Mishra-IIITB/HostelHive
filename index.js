@@ -11,6 +11,7 @@ async function main() {
 }
 const path=require("path");
 const {listingSchema} =require("./schema.js");
+const Review=require("./models/review.js");
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 app.set("view engine","ejs");
@@ -86,6 +87,10 @@ app.delete("/listings/:id",wrapAsync(async (req,res)=>{
     await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
 }));
+// reviews
+app.post("/listings/:id/reviews",async (req,res)=>{
+        
+});
 app.use((req,res,next)=>{
     next(new ExpressError(404,"page not found"));
 });
