@@ -2,8 +2,9 @@
 
 <div class="container my-5">
   <div class="row justify-content-center">
-    <div class="col-md-10 col-lg-8">
 
+    <!-- ✅ Listing Card -->
+    <div class="col-md-10 col-lg-8">
       <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
 
         <!-- Image -->
@@ -21,8 +22,8 @@
 
         <!-- Body -->
         <div class="card-body p-4 p-md-5">
-
           <h2 class="fw-bold mb-2"><%= post.title %></h2>
+
           <p class="text-muted mb-4">
             <i class="fa-solid fa-location-dot me-1 text-danger"></i>
             <%= post.location %>, <%= post.country %>
@@ -72,60 +73,126 @@
           <div class="mt-4 text-center">
             <a href="/listings" class="text-decoration-none">← Back to Listings</a>
           </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ✅ Review Form -->
+    <div class="col-md-10 col-lg-8 mt-5">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+
+          <h4 class="fw-bold mb-3">Leave a Review</h4>
+
+          <form class="needs-validation" novalidate
+                action="/listings/<%= post._id %>/reviews"
+                method="POST">
+
+            <!-- Rating -->
+            <div class="mb-3">
+              <label for="rating" class="form-label fw-semibold">Rating</label>
+
+              <input
+                type="range"
+                class="form-range"
+                id="rating"
+                min="1"
+                max="5"
+                name="review[rating]"
+                required
+              >
+              <div class="invalid-feedback">Please select a rating.</div>
+            </div>
+
+            <!-- Comment -->
+            <div class="mb-3">
+              <label for="comment" class="form-label fw-semibold">Comment</label>
+
+              <textarea
+                name="review[comment]"
+                id="comment"
+                class="form-control"
+                rows="3"
+                placeholder="Write your review here..."
+                required
+              ></textarea>
+
+              <div class="invalid-feedback">Please write a comment.</div>
+            </div>
+
+            <button class="btn btn-danger fw-semibold" type="submit">
+              Submit Review
+            </button>
+
+          </form>
 
         </div>
       </div>
-
-    </div>
-  <!--review-->
-  <div class="mt-5">
-  <h4 class="fw-bold mb-3">Leave a Review</h4>
-
-  <form class="needs-validation" novalidate action="/listings/<%=post.id%>/reviews" method="post">
-
-    <!-- Rating -->
-    <div class="mb-3">
-      <label for="rating" class="form-label fw-semibold">
-        Rating
-      </label>
-
-      <input
-        type="range"
-        class="form-range"
-        id="rating"
-        min="1"
-        max="5"
-        name="review[rating]"
-        required
-      >
-      <div class="invalid-feedback">Please select a rating.</div>
     </div>
 
-    <!-- Comment -->
-    <div class="mb-3">
-      <label for="comment" class="form-label fw-semibold">
-        Comment
-      </label>
+    <!-- ✅ All Reviews Section -->
+    <div class="col-md-10 col-lg-8 mt-5">
+      <h4 class="fw-bold mb-4">All Reviews</h4>
 
-      <textarea
-        name="review[comment]"
-        id="comment"
-        class="form-control"
-        rows="3"
-        placeholder="Write your review here..."
-        required
-      ></textarea>
+      <% if(post.reviews.length === 0) { %>
+        <div class="alert alert-secondary rounded-4 shadow-sm" role="alert">
+          No reviews yet. Be the first one to review!
+        </div>
+      <% } else { %>
 
-      <div class="valid-feedback">Looks good!</div>
-      <div class="invalid-feedback">Please write a comment.</div>
-    </div>
+        <div class="row g-3">
+          <% for(let review of post.reviews) { %>
 
-       <!-- Submit Button -->
-      <button class="btn btn-danger fw-semibold" type="submit">
-        Submit Review
-       </button>
+            <div class="col-12">
+              <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
 
-     </form>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <%
+                      const rating = Number(review.rating);
+                      let badgeClass = "bg-danger"; // 1-2
+                      if (rating >= 4) badgeClass = "bg-success";
+                      else if (rating === 3) badgeClass = "bg-warning text-dark";
+                    %>
+
+                    <!-- ✅ Rating Badge -->
+                    <span class="badge <%= badgeClass %> px-3 py-2 rounded-pill">
+                      ⭐ <%= rating %> / 5
+                    </span>
+
+                    <!-- ✅ Right side: Review label + Delete -->
+                    <div class="d-flex align-items-center gap-2">
+
+                      <!-- ✅ Bootstrap Delete Button -->
+                      <form
+                        method="POST"
+                        action="/listings/<%= post._id %>/reviews/<%= review._id %>?_method=DELETE"
+                        class="d-inline"
+                      >
+                        <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold">
+                          <i class="fa-solid fa-trash me-1"></i> Delete
+                        </button>
+                      </form>
+
+                    </div>
+
+                  </div>
+
+                  <!-- ✅ Comment -->
+                  <p class="mb-0 text-muted fw-semibold">
+                    <%= review.comment %>
+                  </p>
+
+                </div>
+              </div>
+            </div>
+
+          <% } %>
+        </div>
+
+      <% } %>
     </div>
 
   </div>

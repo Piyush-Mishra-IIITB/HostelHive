@@ -10,7 +10,7 @@ async function main() {
   await mongoose.connect('mongodb://127.0.0.1:27017/hostelhive');
 }
 const path=require("path");
-const {listingSchema} =require("./schema.js");
+const {listingSchema,reviewSchema} =require("./schema.js");
 const Review=require("./models/review.js");
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
@@ -33,6 +33,16 @@ app.listen(port,()=>{
 app.get("/",(req,res)=>{
     res.send("hii");
 });
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(", ");
+    throw new ExpressError(400, msg);
+  }
+ else{
+  next();
+}};
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body, { abortEarly: false });
 
@@ -64,7 +74,7 @@ app.post("/listings",validateListing,wrapAsync(async (req,res,next)=>{
 app.get("/listings/:id",wrapAsync(async (req,res)=>{
     console.log("hii");
     let {id}=req.params;
-     let post=await Listing.findById(id);
+     let post=await Listing.findById(id).populate("reviews");
      console.log(post);
     res.render("listings/show",{post});
 }));
@@ -88,9 +98,22 @@ app.delete("/listings/:id",wrapAsync(async (req,res)=>{
     res.redirect("/listings");
 }));
 // reviews
-app.post("/listings/:id/reviews",async (req,res)=>{
-        
-});
+app.post("/listings/:id/reviews",validateReview,wrapAsync(async (req,res)=>{
+        let {id}=req.params;
+        let newReview =new Review(req.body.review);
+        let listing=await Listing.findById(id);
+        listing.reviews.push(newReview);
+        await newReview.save();
+        await listing.save();
+        res.redirect(`/listings/${id}`);
+}));
+
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+    let{id,reviewId}=req.params;
+    await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
+}));
 app.use((req,res,next)=>{
     next(new ExpressError(404,"page not found"));
 });
