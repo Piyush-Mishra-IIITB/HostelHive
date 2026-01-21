@@ -2,7 +2,7 @@ const express=require("express");
 const app=express();
 const port=8080;
 const mongoose = require('mongoose');
-const Listing = require("./models/listing.js");
+const flash=require("connect-flash");
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 const ejsMate=require("ejs-mate");
@@ -10,12 +10,11 @@ async function main() {
   await mongoose.connect('mongodb://127.0.0.1:27017/hostelhive');
 }
 const listings=require("./routes/listing.js");
+const reviews=require("./routes/review.js");
 const path=require("path");
-const {listingSchema,reviewSchema} =require("./schema.js");
-const Review=require("./models/review.js");
-const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
-const listing = require("./models/listing.js");
+const session=require("express-session");
+
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({ extended: true }));
@@ -35,36 +34,26 @@ app.listen(port,()=>{
 app.get("/",(req,res)=>{
     res.send("hii");
 });
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body, { abortEarly: false });
-
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(", ");
-    throw new ExpressError(400, msg);
-  }
- else{
+const secreOption={
+secret:"mysupersecretcode",
+resave:false, 
+saveUninitialized:true,
+cookie:{
+  expires:new Date(Date.now()+ 7*24*60*60*1000),
+  maxAge:7*24*60*60*1000,
+  httpOnly:true,
+},
+};
+app.use(session(secreOption));
+app.use(flash());
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
   next();
-}};
-
+});
 app.use("/listings",listings);
-
-// reviews
-app.post("/listings/:id/reviews",validateReview,wrapAsync(async (req,res)=>{
-        let {id}=req.params;
-        let newReview =new Review(req.body.review);
-        let listing=await Listing.findById(id);
-        listing.reviews.push(newReview);
-        await newReview.save();
-        await listing.save();
-        res.redirect(`/listings/${id}`);
-}));
-
-app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
-    let{id,reviewId}=req.params;
-    await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listings/${id}`);
-}));
+app.use("/listings/:id/reviews",reviews);
+  
 app.use((req,res,next)=>{
     next(new ExpressError(404,"page not found"));
 });
