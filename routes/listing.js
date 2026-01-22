@@ -4,6 +4,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
 const {listingSchema} =require("../schema.js");
 const Listing = require("../models/listing.js");
+const {isLoggedIn} =require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body, { abortEarly: false });
@@ -20,15 +21,16 @@ router.get("/",wrapAsync(async (req,res)=>{
    let posts=await Listing.find({});
    res.render("listings/home",{posts});
 }));
-router.get("/new",(req,res)=>{
-     res.render("listings/new");
+router.get("/new",isLoggedIn,(req,res)=>{
+  res.render("listings/new");
 });
-router.post("/",validateListing,wrapAsync(async (req,res,next)=>{
+router.post("/",isLoggedIn,validateListing,wrapAsync(async (req,res,next)=>{
     
     if(!req.body.listing){
         throw new ExpressError(400,"Send Valid data");
     }
     const newListing=new Listing(req.body.listing);
+    newListing.owner=req.user._id;
     await newListing.save();
     req.flash("success", "New listing created!");
     res.redirect("/listings");
@@ -37,7 +39,10 @@ router.post("/",validateListing,wrapAsync(async (req,res,next)=>{
 router.get("/:id",wrapAsync(async (req,res)=>{
     console.log("hii");
     let {id}=req.params;
-     let post=await Listing.findById(id).populate("reviews");
+     let post=await Listing.findById(id)
+     .populate("reviews")
+     .populate("owner"); 
+
      if(!post){
       req.flash("error","Your Listing does not exist");
       return res.redirect("/listings");
@@ -45,12 +50,12 @@ router.get("/:id",wrapAsync(async (req,res)=>{
     res.render("listings/show",{post});
 }));
 
-router.get("/:id/edit", wrapAsync(async (req,res)=>{
+router.get("/:id/edit",isLoggedIn,wrapAsync(async (req,res)=>{
     let {id}=req.params;
    const listing=await Listing.findById(id);
     res.render("listings/edit",{listing});
 }));
-router.patch("/:id",validateListing, wrapAsync(async (req,res)=>{
+router.patch("/:id",isLoggedIn,validateListing, wrapAsync(async (req,res)=>{
     let {id}=req.params;
     if (!req.body.listing.image?.url) {
     delete req.body.listing.image;
@@ -59,7 +64,7 @@ router.patch("/:id",validateListing, wrapAsync(async (req,res)=>{
     req.flash("success","Listing Updated!")
     res.redirect("/listings");
 }));
-router.delete("/:id",wrapAsync(async (req,res)=>{
+router.delete("/:id",isLoggedIn,wrapAsync(async (req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndDelete(id);
     req.flash("success","Listing Deleted!")
