@@ -4,7 +4,7 @@ const wrapAsync=require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
 const {listingSchema} =require("../schema.js");
 const Listing = require("../models/listing.js");
-const {isLoggedIn} =require("../middleware.js");
+const {isLoggedIn, isOwner} =require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   const { error } = listingSchema.validate(req.body, { abortEarly: false });
@@ -50,21 +50,23 @@ router.get("/:id",wrapAsync(async (req,res)=>{
     res.render("listings/show",{post});
 }));
 
-router.get("/:id/edit",isLoggedIn,wrapAsync(async (req,res)=>{
+router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(async (req,res)=>{
     let {id}=req.params;
    const listing=await Listing.findById(id);
     res.render("listings/edit",{listing});
 }));
-router.patch("/:id",isLoggedIn,validateListing, wrapAsync(async (req,res)=>{
+router.patch("/:id",isLoggedIn,isOwner,validateListing, wrapAsync(async (req,res)=>{
     let {id}=req.params;
     if (!req.body.listing.image?.url) {
     delete req.body.listing.image;
   }
+   let listing=await Listing.findById(id);
+   
     await Listing.findByIdAndUpdate(id,req.body.listing,{runValidators:true});
     req.flash("success","Listing Updated!")
     res.redirect("/listings");
 }));
-router.delete("/:id",isLoggedIn,wrapAsync(async (req,res)=>{
+router.delete("/:id",isLoggedIn,isOwner,wrapAsync(async (req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndDelete(id);
     req.flash("success","Listing Deleted!")

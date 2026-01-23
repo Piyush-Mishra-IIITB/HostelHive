@@ -19,7 +19,14 @@
             ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
           </span>
         </div>
-       <h2>Owned By: <%= post.owner[0].username %></h2>
+
+        <!-- ✅ Owner -->
+        <div class="p-3 bg-light border-bottom">
+          <h5 class="m-0 fw-semibold">
+            Owned By: 
+            <%= post.owner?.[0]?.username || post.owner?.[0]?.email || "Unknown" %>
+          </h5>
+        </div>
 
         <!-- Body -->
         <div class="card-body p-4 p-md-5">
@@ -35,6 +42,7 @@
 
           <!-- Price & Location boxes -->
           <div class="row g-3 mb-4">
+            
             <!-- Price -->
             <div class="col-md-6">
               <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column justify-content-center">
@@ -46,7 +54,7 @@
             </div>
 
             <!-- Location -->
-            <div class="col-md-6">
+            <div class="col-md	               md-6">
               <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column justify-content-center">
                 <p class="mb-1 text-muted">Location</p>
                 <h6 class="mb-0 fw-semibold text-truncate">
@@ -57,18 +65,19 @@
             </div>
           </div>
 
-          <!-- Buttons -->
-          <div class="d-flex gap-2">
-            <a href="/listings/<%= post._id %>/edit" class="btn btn-danger w-100 fw-semibold">
-              Edit
-            </a>
+          <!-- ✅ Edit/Delete ONLY owner can see -->
+            <div class="d-flex gap-2 mb-3">
+              <a href="/listings/<%= post._id %>/edit" class="btn btn-danger w-100 fw-semibold">
+                Edit
+              </a>
 
-            <form method="POST" action="/listings/<%= post._id %>?_method=DELETE" class="w-100">
-              <button class="btn btn-outline-dark w-100 fw-semibold" type="submit">
-                Delete
-              </button>
-            </form>
-          </div>
+              <form method="POST" action="/listings/<%= post._id %>?_method=DELETE" class="w-100">
+                <button class="btn btn-outline-dark w-100 fw-semibold" type="submit">
+                  Delete
+                </button>
+              </form>
+            </div>
+         
 
           <!-- Back -->
           <div class="mt-4 text-center">
@@ -136,14 +145,14 @@
     <div class="col-md-10 col-lg-8 mt-5">
       <h4 class="fw-bold mb-4">All Reviews</h4>
 
-      <% if(post.reviews.length === 0) { %>
+      <% if (post.reviews.length === 0) { %>
         <div class="alert alert-secondary rounded-4 shadow-sm" role="alert">
           No reviews yet. Be the first one to review!
         </div>
       <% } else { %>
 
         <div class="row g-3">
-          <% for(let review of post.reviews) { %>
+          <% for (let review of post.reviews) { %>
 
             <div class="col-12">
               <div class="card shadow-sm border-0 rounded-4">
@@ -153,7 +162,7 @@
 
                     <%
                       const rating = Number(review.rating);
-                      let badgeClass = "bg-danger"; // 1-2
+                      let badgeClass = "bg-danger";
                       if (rating >= 4) badgeClass = "bg-success";
                       else if (rating === 3) badgeClass = "bg-warning text-dark";
                     %>
@@ -163,21 +172,16 @@
                       ⭐ <%= rating %> / 5
                     </span>
 
-                    <!-- ✅ Right side: Review label + Delete -->
-                    <div class="d-flex align-items-center gap-2">
-
-                      <!-- ✅ Bootstrap Delete Button -->
-                      <form
-                        method="POST"
-                        action="/listings/<%= post._id %>/reviews/<%= review._id %>?_method=DELETE"
-                        class="d-inline"
-                      >
-                        <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold">
-                          <i class="fa-solid fa-trash me-1"></i> Delete
-                        </button>
-                      </form>
-
-                    </div>
+                    <!-- ✅ Delete Review -->
+                    <form
+                      method="POST"
+                      action="/listings/<%= post._id %>/reviews/<%= review._id %>?_method=DELETE"
+                      class="d-inline"
+                    >
+                      <button type="submit" class="btn btn-outline-danger btn-sm fw-semibold">
+                        <i class="fa-solid fa-trash me-1"></i> Delete
+                      </button>
+                    </form>
 
                   </div>
 
@@ -192,7 +196,9 @@
 
           <% } %>
         </div>
+
       <% } %>
     </div>
+
   </div>
 </div>
