@@ -1,58 +1,73 @@
-# 🏨 HostelHive
+# 🏡 StayNext
 
-HostelHive is a full-stack web application that allows users to list hostels, explore available stays, and leave reviews. It features secure authentication, listing ownership, and a modern UI inspired by Airbnb-style platforms.
+**StayNext** is a full-stack accommodation listing web application inspired by platforms like Airbnb.  
+It allows users to explore stays, filter by categories, search by location, create listings, and leave reviews — all with secure authentication and cloud-based image storage.
 
 ---
 
 ## 🚀 Features
 
-### 🔐 Authentication & Authorization
-- User Signup & Login (Passport.js)
-- Session-based authentication
-- Flash messages for feedback
-- Protected routes for listings & reviews
+### 🔍 Explore Listings
+- View all available stays with images, price, and location
+- Responsive card-based UI
 
-### 🏡 Listings
-- Create, Edit, Delete hostel listings
-- Image support for listings
-- Owner-based edit/delete permissions
-- Location, price, and description support
+### 🗂️ Category Filtering
+- Browse stays by categories:
+  - Trending
+  - Iconic Cities
+  - Mountains
+  - Amazing Pools
+  - Beach
+  - Countryside
+  - Luxe
+  - Heritage
+  - Farm Stay
+  - Camping
 
-### ⭐ Reviews & Ratings
-- Add reviews with **star-based rating**
-- Display all reviews with author names
-- Delete reviews (only by review author)
-- Stars UI instead of numeric rating
+### 🔎 Search
+- Search listings by **location** (case-insensitive)
 
-### 👤 Ownership Rules
-- Only listing owners can edit/delete their listings
-- Only review authors can delete their reviews
+### 👤 Authentication & Authorization
+- User signup & login (Passport.js)
+- Only logged-in users can:
+  - Create listings
+  - Add reviews
+- Only owners can:
+  - Edit or delete their listings
+- Only review authors can:
+  - Delete their reviews
 
-### 🎨 UI & UX
-- Bootstrap responsive design
-- Star rating UI
-- Flash success & error messages
-- Clean and modern listing cards
+### 📝 Reviews & Ratings
+- Star-based rating system ⭐
+- Reviews linked to authenticated users
+
+### 🖼️ Image Upload
+- Image upload using **Multer**
+- Cloud storage via **Cloudinary**
+
+### 🔐 Secure Sessions
+- Sessions stored in **MongoDB Atlas** using `connect-mongo`
+- Flash messages for better UX
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend**
-- EJS
+### Frontend
+- EJS (with EJS-Mate layouts)
 - Bootstrap 5
 - Font Awesome
+- Custom CSS
 
-**Backend**
+### Backend
 - Node.js
 - Express.js
-- MongoDB
-- Mongoose
-- Passport.js
+- MongoDB & Mongoose
+- Passport.js (Local Strategy)
 
-**Other Tools**
-- Joi Validation
-- Method Override
-- Express Flash
+### Cloud & Storage
+- MongoDB Atlas
+- Cloudinary (image hosting)
 
 ---
+

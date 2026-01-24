@@ -18,7 +18,7 @@ router.post(
     req.login(registeredUser, (err) => {
       if (err) return next(err);
 
-      req.flash("success", "Welcome to HostelHive!");
+      req.flash("success", "Welcome to StayNext!");
       res.redirect("/listings");
     });
   })
@@ -30,7 +30,7 @@ router.route("/login")
 .post(redirectURL,
     passport.authenticate("local",{failureRedirect:"/login",failureFlash:true,}),
     async (req,res)=>{
-    req.flash("success","Welcome back to HostelHive!");
+    req.flash("success","Welcome back to StayNext!");
     let redirectURL=res.locals.redirectURL || "/listings";
     res.redirect(redirectURL);
 });
