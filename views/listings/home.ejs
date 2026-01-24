@@ -1,42 +1,130 @@
 <% layout("/layouts/boilerplate") %>
 
+<!-- 🌍 CATEGORY BAR -->
+<div class="container mb-4">
+  <div class="d-flex gap-4 overflow-auto category-bar">
+
+    <a href="/listings/category?category=trending"
+       class="category-item text-center <%= selectedCategory === 'trending' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-fire"></i>
+      <p>Trending</p>
+    </a>
+
+    <a href="/listings/category?category=cities"
+       class="category-item text-center <%= selectedCategory === 'cities' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-city"></i>
+      <p>Iconic Cities</p>
+    </a>
+
+    <a href="/listings/category?category=mountains"
+       class="category-item text-center <%= selectedCategory === 'mountains' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-mountain"></i>
+      <p>Mountains</p>
+    </a>
+
+    <a href="/listings/category?category=pools"
+       class="category-item text-center <%= selectedCategory === 'pools' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-water-ladder"></i>
+      <p>Amazing Pools</p>
+    </a>
+
+    <a href="/listings/category?category=beach"
+       class="category-item text-center <%= selectedCategory === 'beach' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-umbrella-beach"></i>
+      <p>Beach</p>
+    </a>
+
+    <a href="/listings/category?category=countryside"
+       class="category-item text-center <%= selectedCategory === 'countryside' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-tree"></i>
+      <p>Countryside</p>
+    </a>
+
+    <a href="/listings/category?category=luxe"
+       class="category-item text-center <%= selectedCategory === 'luxe' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-gem"></i>
+      <p>Luxe</p>
+    </a>
+
+    <a href="/listings/category?category=heritage"
+       class="category-item text-center <%= selectedCategory === 'heritage' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-landmark"></i>
+      <p>Heritage</p>
+    </a>
+
+    <a href="/listings/category?category=farmstay"
+       class="category-item text-center <%= selectedCategory === 'farmstay' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-tractor"></i>
+      <p>Farm Stay</p>
+    </a>
+
+    <a href="/listings/category?category=camping"
+       class="category-item text-center <%= selectedCategory === 'camping' ? 'active-category' : '' %>">
+      <i class="fa-solid fa-campground"></i>
+      <p>Camping</p>
+    </a>
+
+  </div>
+</div>
+
+<!-- 🏠 LISTINGS GRID -->
 <div class="container mt-4">
+
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <p class="text-muted mb-0">Find your next stay</p>
-    </div>
+    <p class="text-muted mb-0">
+      <%= selectedCategory ? `Showing ${selectedCategory} stays` : "Find your next stay" %>
+    </p>
   </div>
 
-  <div class="row g-4">
-    <% for (let post of posts) { %>
-      <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-        <a class="listing-link" href="/listings/<%= post._id %>">
-          <div class="card listing-card h-100 border-0">
-            
-            <div class="listing-img-wrap">
-              <img src="<%= post.image.url %>" class="card-img-top listing-img" alt="listing_image" >
+  <% if (posts.length === 0) { %>
+    <div class="alert alert-secondary text-center rounded-4">
+      No listings found for this category.
+    </div>
+  <% } else { %>
+
+    <div class="row g-4">
+      <% for (let post of posts) { %>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <a href="/listings/<%= post._id %>" class="listing-link text-decoration-none">
+
+            <div class="card listing-card h-100 border-0">
+
+              <!-- Image -->
+              <div class="listing-img-wrap">
+                <img
+                  src="<%= post.image?.url || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800' %>"
+                  class="card-img-top listing-img"
+                  alt="listing_image"
+                >
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+
+                <span class="price-badge">
+                  ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
+                </span>
+
+                <h5 class="card-title listing-title mt-2">
+                  <%= post.title %>
+                </h5>
+
+                <p class="card-text text-muted listing-location mb-0">
+                  <i class="fa-solid fa-location-dot me-1"></i>
+                  <%= post.location %>, <%= post.country %>
+                </p>
 
               </div>
-              
-           
 
-            <div class="card-body">
-              <span class="price-badge">
-                ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
-              </span>
-              <h5 class="card-title listing-title">
-                <%= post.title %>
-              </h5>
-
-              <p class="card-text text-muted listing-location mb-0">
-                <i class="fa-solid fa-location-dot me-1"></i>
-                <%= post.location %>, <%= post.country %>
-              </p>
             </div>
 
-          </div>
-        </a>
-      </div>
-    <% } %>
-  </div>
+          </a>
+        </div>
+
+      <% } %>
+    </div>
+
+  <% } %>
+
 </div>

@@ -2,19 +2,30 @@
 
 <div class="container my-5">
   <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
+    <div class="col-md-9 col-lg-7 col-xl-6">
 
       <div class="card shadow-sm border-0 rounded-4">
         <div class="card-body p-4 p-md-5">
 
-          <h2 class="fw-bold mb-2">Create a New Listing</h2>
-          <p class="text-muted mb-4">Add hostel details to publish your listing.</p>
+          <!-- Header -->
+          <div class="mb-4">
+            <h2 class="fw-bold mb-2">Create a New Listing</h2>
+            <p class="text-muted mb-0">
+              Add hostel details to publish your listing.
+            </p>
+          </div>
 
-          <form action="/listings" method="post" novalidate class="needs-validation">
+          <form 
+            action="/listings" 
+            method="POST" 
+            class="needs-validation" 
+            novalidate 
+            enctype="multipart/form-data"
+          >
 
             <!-- Title -->
-            <div class="mb-3">
-              <label for="title" class="form-label fw-semibold">Title</label>
+            <div class="mb-4">
+              <label for="title" class="form-label fw-semibold mb-2">Title</label>
               <input
                 id="title"
                 class="form-control"
@@ -23,13 +34,14 @@
                 placeholder="Enter title"
                 required
               >
-              <div class="valid-feedback">Looks good</div>
-              <div class="invalid-feedback">Please enter a title</div>
+              <div class="invalid-feedback">
+                Please enter a title.
+              </div>
             </div>
 
             <!-- Description -->
-            <div class="mb-3">
-              <label for="description" class="form-label fw-semibold">Description</label>
+            <div class="mb-4">
+              <label for="description" class="form-label fw-semibold mb-2">Description</label>
               <textarea
                 id="description"
                 class="form-control"
@@ -38,43 +50,68 @@
                 placeholder="Enter description"
                 required
               ></textarea>
-
-              <div class="valid-feedback">Great! Description added.</div>
-              <div class="invalid-feedback">Please enter a valid description</div>
+              <div class="invalid-feedback">
+                Please enter a description.
+              </div>
             </div>
 
-            <!-- Image URL -->
-            <div class="mb-3">
-              <label for="image" class="form-label fw-semibold">Image URL</label>
+            <!-- Image -->
+            <div class="mb-4">
+              <label for="image" class="form-label fw-semibold mb-2">Image</label>
               <input
                 id="image"
                 class="form-control"
-                name="listing[image][url]"
-                type="url"
-                placeholder="Enter image URL"
+                name="image"
+                type="file"
               >
             </div>
 
+            <!-- Category -->
+            <div class="mb-4">
+              <label for="category" class="form-label fw-semibold mb-2">Category</label>
+              <select 
+                class="form-select" 
+                id="category" 
+                name="listing[category]" 
+                required
+              >
+                <option value="">Select category</option>
+                <option value="trending">Trending</option>
+                <option value="cities">Iconic Cities</option>
+                <option value="mountains">Mountains</option>
+                <option value="pools">Amazing Pools</option>
+                <option value="beach">Beach</option>
+                <option value="countryside">Countryside</option>
+                <option value="luxe">Luxe</option>
+                <option value="heritage">Heritage</option>
+                <option value="farmstay">Farm Stay</option>
+                <option value="camping">Camping</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a category.
+              </div>
+            </div>
+
             <!-- Price -->
-            <div class="mb-3">
-              <label for="price" class="form-label fw-semibold">Price (₹)</label>
+            <div class="mb-4">
+              <label for="price" class="form-label fw-semibold mb-2">Price (₹)</label>
               <input
                 id="price"
                 class="form-control"
                 name="listing[price]"
                 type="number"
-                placeholder="Enter price"
                 min="0"
+                placeholder="Enter price"
                 required
               >
-             <div class="valid-feedback">Perfect!</div>
-             <div class="invalid-feedback">Please enter a valid price (₹0 or more).</div>
-
+              <div class="invalid-feedback">
+                Please enter a valid price.
+              </div>
             </div>
 
             <!-- Location -->
-            <div class="mb-3">
-              <label for="location" class="form-label fw-semibold">Location</label>
+            <div class="mb-4">
+              <label for="location" class="form-label fw-semibold mb-2">Location</label>
               <input
                 id="location"
                 class="form-control"
@@ -83,14 +120,14 @@
                 placeholder="Enter location"
                 required
               >
-             <div class="valid-feedback">Location looks good.</div>
-             <div class="invalid-feedback">Please enter a location (e.g., Bhopal, Indore).</div>
-
+              <div class="invalid-feedback">
+                Please enter a location.
+              </div>
             </div>
 
             <!-- Country -->
-            <div class="mb-4">
-              <label for="country" class="form-label fw-semibold">Country</label>
+            <div class="mb-5">
+              <label for="country" class="form-label fw-semibold mb-2">Country</label>
               <input
                 id="country"
                 class="form-control"
@@ -99,16 +136,24 @@
                 placeholder="Enter country"
                 required
               >
-              <div class="valid-feedback">Country look's good</div>
-              <div class="invalid-feedback">Please enter a valid country</div>
+              <div class="invalid-feedback">
+                Please enter a country.
+              </div>
             </div>
 
             <!-- Buttons -->
-            <div class="d-flex gap-2">
-              <button class="btn btn-danger w-100 fw-semibold" type="submit">
+            <div class="d-flex gap-3">
+              <button 
+                class="btn btn-danger w-100 fw-semibold py-2" 
+                type="submit"
+              >
                 Add Listing
               </button>
-              <a class="btn btn-outline-secondary w-100" href="/listings">
+
+              <a 
+                class="btn btn-outline-secondary w-100 py-2" 
+                href="/listings"
+              >
                 Cancel
               </a>
             </div>

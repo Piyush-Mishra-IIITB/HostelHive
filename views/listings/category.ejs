@@ -1,0 +1,76 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- 🌍 Category Heading -->
+<div class="container mt-4 mb-3">
+  <h3 class="fw-bold text-capitalize">
+    <%= selectedCategory %> stays
+  </h3>
+  <p class="text-muted mb-0">
+    <%= allListings.length %> place(s) found
+  </p>
+</div>
+
+<!-- 🏠 Listings Grid -->
+<div class="container mt-4">
+
+  <% if (allListings.length === 0) { %>
+    <div class="alert alert-secondary rounded-4 text-center">
+      No listings found in this category.
+    </div>
+  <% } else { %>
+
+    <div class="row g-4">
+      <% for (let post of allListings) { %>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <a 
+            class="listing-link text-decoration-none"
+            href="/listings/<%= post._id %>"
+          >
+
+            <div class="card listing-card h-100 border-0">
+
+              <!-- Image -->
+              <div class="listing-img-wrap">
+                <img 
+                  src="<%= post.image?.url || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800' %>"
+                  class="card-img-top listing-img"
+                  alt="listing image"
+                >
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+
+                <span class="price-badge">
+                  ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
+                </span>
+
+                <h5 class="card-title listing-title mt-2">
+                  <%= post.title %>
+                </h5>
+
+                <p class="card-text text-muted listing-location mb-0">
+                  <i class="fa-solid fa-location-dot me-1"></i>
+                  <%= post.location %>, <%= post.country %>
+                </p>
+
+              </div>
+
+            </div>
+          </a>
+        </div>
+
+      <% } %>
+    </div>
+
+  <% } %>
+
+  <!-- Back -->
+  <div class="mt-4 text-center">
+    <a href="/listings" class="text-decoration-none">
+      ← Back to all listings
+    </a>
+  </div>
+
+</div>

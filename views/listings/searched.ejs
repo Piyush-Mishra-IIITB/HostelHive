@@ -1,0 +1,79 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+  <!-- 🔍 Search Heading -->
+  <div class="mb-4">
+    <h4 class="fw-semibold">
+      Search results for "<%= location %>"
+    </h4>
+    <p class="text-muted mb-0">
+      <%= AllListings.length %> result(s) found
+    </p>
+  </div>
+
+  <% if (AllListings.length === 0) { %>
+    <!-- ❌ No Results -->
+    <div class="alert alert-warning text-center rounded-4">
+      No listings found for "<b><%= location %></b>"
+    </div>
+
+    <div class="text-center mt-3">
+      <a href="/listings" class="btn btn-outline-danger">
+        ← Back to all listings
+      </a>
+    </div>
+
+  <% } else { %>
+
+    <!-- ✅ Listings Grid -->
+    <div class="row g-4">
+      <% for (let post of AllListings) { %>
+
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <a class="listing-link" href="/listings/<%= post._id %>">
+
+            <div class="card listing-card h-100 border-0">
+
+              <!-- Image -->
+              <div class="listing-img-wrap">
+                <img 
+                  src="<%= post.image?.url || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800' %>" 
+                  class="card-img-top listing-img"
+                  alt="listing image"
+                >
+              </div>
+
+              <!-- Body -->
+              <div class="card-body">
+                <span class="price-badge">
+                  ₹ <%= Number(post.price).toLocaleString("en-IN") %> / night
+                </span>
+
+                <h5 class="card-title listing-title mt-1">
+                  <%= post.title %>
+                </h5>
+
+                <p class="card-text text-muted listing-location mb-0">
+                  <i class="fa-solid fa-location-dot me-1"></i>
+                  <%= post.location %>, <%= post.country %>
+                </p>
+              </div>
+
+            </div>
+          </a>
+        </div>
+
+      <% } %>
+    </div>
+
+    <!-- Back -->
+    <div class="text-center mt-5">
+      <a href="/listings" class="text-decoration-none">
+        ← Back to all listings
+      </a>
+    </div>
+
+  <% } %>
+
+</div>
