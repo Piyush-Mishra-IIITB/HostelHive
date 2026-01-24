@@ -54,7 +54,7 @@
             </div>
 
             <!-- Location -->
-            <div class="col-md	               md-6">
+            <div class="col-md-6">
               <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column justify-content-center">
                 <p class="mb-1 text-muted">Location</p>
                 <h6 class="mb-0 fw-semibold text-truncate">
@@ -66,18 +66,17 @@
           </div>
 
           <!-- ✅ Edit/Delete ONLY owner can see -->
-            <div class="d-flex gap-2 mb-3">
-              <a href="/listings/<%= post._id %>/edit" class="btn btn-danger w-100 fw-semibold">
-                Edit
-              </a>
+          <div class="d-flex gap-2 mb-3">
+            <a href="/listings/<%= post._id %>/edit" class="btn btn-danger w-100 fw-semibold">
+              Edit
+            </a>
 
-              <form method="POST" action="/listings/<%= post._id %>?_method=DELETE" class="w-100">
-                <button class="btn btn-outline-dark w-100 fw-semibold" type="submit">
-                  Delete
-                </button>
-              </form>
-            </div>
-         
+            <form method="POST" action="/listings/<%= post._id %>?_method=DELETE" class="w-100">
+              <button class="btn btn-outline-dark w-100 fw-semibold" type="submit">
+                Delete
+              </button>
+            </form>
+          </div>
 
           <!-- Back -->
           <div class="mt-4 text-center">
@@ -99,19 +98,27 @@
                 action="/listings/<%= post._id %>/reviews"
                 method="POST">
 
-            <!-- Rating -->
+            <!-- ✅ Rating Stars -->
             <div class="mb-3">
-              <label for="rating" class="form-label fw-semibold">Rating</label>
+              <label class="form-label fw-semibold">Rating</label>
 
-              <input
-                type="range"
-                class="form-range"
-                id="rating"
-                min="1"
-                max="5"
-                name="review[rating]"
-                required
-              >
+              <div class="star-rating">
+                <input type="radio" id="star5" name="review[rating]" value="5" required>
+                <label for="star5" title="5 stars">★</label>
+
+                <input type="radio" id="star4" name="review[rating]" value="4">
+                <label for="star4" title="4 stars">★</label>
+
+                <input type="radio" id="star3" name="review[rating]" value="3">
+                <label for="star3" title="3 stars">★</label>
+
+                <input type="radio" id="star2" name="review[rating]" value="2">
+                <label for="star2" title="2 stars">★</label>
+
+                <input type="radio" id="star1" name="review[rating]" value="1">
+                <label for="star1" title="1 star">★</label>
+              </div>
+
               <div class="invalid-feedback">Please select a rating.</div>
             </div>
 
@@ -160,20 +167,16 @@
 
                   <div class="d-flex justify-content-between align-items-center mb-2">
 
-                    <%
-                      const rating = Number(review.rating);
-                      let badgeClass = "bg-danger";
-                      if (rating >= 4) badgeClass = "bg-success";
-                      else if (rating === 3) badgeClass = "bg-warning text-dark";
-                    %>
+                    <!-- ✅ Review Author -->
+                    <h5 class="mb-0"><%= review.author?.username || review.author?.email || "Anonymous" %></h5>
 
-                    <!-- ✅ FIXED AUTHOR -->
-                    <h3><%= review.author?.username || review.author?.email || "Anonymous" %></h3>
-
-                    <!-- ✅ Rating Badge -->
-                    <span class="badge <%= badgeClass %> px-3 py-2 rounded-pill">
-                      ⭐ <%= rating %> / 5
-                    </span>
+                    <!-- ✅ Stars Rating (No badge color) -->
+                    <% const rating = Number(review.rating); %>
+                    <div class="review-stars">
+                      <% for(let i=1; i<=5; i++){ %>
+                        <span class="<%= i<=rating ? 'star-filled' : 'star-empty' %>">★</span>
+                      <% } %>
+                    </div>
 
                     <!-- ✅ Delete Review -->
                     <form

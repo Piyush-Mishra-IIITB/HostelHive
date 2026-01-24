@@ -23,12 +23,11 @@ router.post(
     });
   })
 );
-
-router.get("/login",(req,res)=>{
+router.route("/login")
+.get((req,res)=>{
     res.render("users/login.ejs");
-});
-
-router.post("/login",redirectURL,
+})
+.post(redirectURL,
     passport.authenticate("local",{failureRedirect:"/login",failureFlash:true,}),
     async (req,res)=>{
     req.flash("success","Welcome back to HostelHive!");
@@ -36,7 +35,7 @@ router.post("/login",redirectURL,
     res.redirect(redirectURL);
 });
 
-router.get("/logout",(req,res)=>{
+router.get("/logout",(req,res,next)=>{
     req.logout((err)=>{
         if(err){
             return next(err);

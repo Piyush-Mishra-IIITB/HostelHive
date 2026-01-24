@@ -17,15 +17,13 @@ const validateListing = (req, res, next) => {
   next();
 }};
 
-router.get("/",wrapAsync(async (req,res)=>{
+router.route("/")
+.get(wrapAsync(async (req,res)=>{
    let posts=await Listing.find({});
    res.render("listings/home",{posts});
-}));
-router.get("/new",isLoggedIn,(req,res)=>{
-  res.render("listings/new");
-});
-router.post("/",isLoggedIn,validateListing,wrapAsync(async (req,res,next)=>{
-    
+}))
+.post(isLoggedIn,validateListing,wrapAsync(async (req,res,next)=>{
+
     if(!req.body.listing){
         throw new ExpressError(400,"Send Valid data");
     }
@@ -34,9 +32,15 @@ router.post("/",isLoggedIn,validateListing,wrapAsync(async (req,res,next)=>{
     await newListing.save();
     req.flash("success", "New listing created!");
     res.redirect("/listings");
-    
+
 }));
-router.get("/:id",wrapAsync(async (req,res)=>{
+
+router.get("/new",isLoggedIn,(req,res)=>{
+  res.render("listings/new");
+});
+
+router.route("/:id")
+.get(wrapAsync(async (req,res)=>{
     console.log("hii");
     let {id}=req.params;
      let post=await Listing.findById(id)
@@ -45,36 +49,36 @@ router.get("/:id",wrapAsync(async (req,res)=>{
      populate:{
       path:"author"
 }})
-     .populate("owner"); 
+     .populate("owner");
 
      if(!post){
       req.flash("error","Your Listing does not exist");
       return res.redirect("/listings");
      }
     res.render("listings/show",{post});
+}))
+.patch(isLoggedIn,isOwner,validateListing, wrapAsync(async (req,res)=>{
+    let {id}=req.params;
+    if (!req.body.listing.image?.url) {
+    delete req.body.listing.image;
+  }
+   let listing=await Listing.findById(id);
+
+    await Listing.findByIdAndUpdate(id,req.body.listing,{runValidators:true});
+    req.flash("success","Listing Updated!")
+    res.redirect("/listings");
+}))
+.delete(isLoggedIn,isOwner,wrapAsync(async (req,res)=>{
+    let {id}=req.params;
+    await Listing.findByIdAndDelete(id);
+    req.flash("success","Listing Deleted!")
+    res.redirect("/listings");
 }));
 
 router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(async (req,res)=>{
     let {id}=req.params;
    const listing=await Listing.findById(id);
     res.render("listings/edit",{listing});
-}));
-router.patch("/:id",isLoggedIn,isOwner,validateListing, wrapAsync(async (req,res)=>{
-    let {id}=req.params;
-    if (!req.body.listing.image?.url) {
-    delete req.body.listing.image;
-  }
-   let listing=await Listing.findById(id);
-   
-    await Listing.findByIdAndUpdate(id,req.body.listing,{runValidators:true});
-    req.flash("success","Listing Updated!")
-    res.redirect("/listings");
-}));
-router.delete("/:id",isLoggedIn,isOwner,wrapAsync(async (req,res)=>{
-    let {id}=req.params;
-    await Listing.findByIdAndDelete(id);
-    req.flash("success","Listing Deleted!")
-    res.redirect("/listings");
 }));
 
 module.exports=router;

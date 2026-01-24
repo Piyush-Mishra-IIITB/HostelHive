@@ -101,3 +101,39 @@ footer {
 .text-truncate{
   max-width: 100%;
 }
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.2s ease-in-out;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f5b301; /* golden */
+}
+.review-stars{
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.star-filled{
+  color: #f5b301;
+}
+
+.star-empty{
+  color: #ddd;
+}
